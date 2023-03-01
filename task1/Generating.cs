@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace task1
+namespace np_4sem_proj
 {
     internal class Generating
     {
@@ -41,11 +41,11 @@ namespace task1
             }
             if (group > 0)
             {
-                return rand.Next(max);
+                return rand.Next(1,max);
             }
             else if (group < 0)
             {
-                return rand.Next(max) * -1;
+                return rand.Next(1,max) * -1;
             }
             else
             {

@@ -1,5 +1,5 @@
 ﻿
-namespace task1
+namespace np_4sem_proj
 {
     internal class Program
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace task1
+namespace np_4sem_proj
 {
     internal class Task1
     {
