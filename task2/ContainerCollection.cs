@@ -160,17 +160,6 @@ namespace np_4sem_proj
             }
             return found;
         }
-        /*sorting_attr = Validation.validate_default_property(sorting_attr, Container.default_props())
-
-            # function helper to lambda
-            def get_attr(x):
-                attr = getattr(x, sorting_attr)
-                if isinstance(attr, str):
-                    return attr.lower()
-                else:
-                    return attr
-
-            self._collection = sorted(self._collection, key=lambda x: get_attr(x), reverse=reverse)*/
         public void Sort(string sorting_attr = "number")
         {
             if (!Container.GetPropsNames().Contains(sorting_attr))

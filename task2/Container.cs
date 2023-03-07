@@ -55,7 +55,6 @@ namespace np_4sem_proj
             }
          
         }
-        //[JsonConstructor]
         public Container(params string[] p)
         {
             List<string> props = GetPropsNames();
@@ -83,16 +82,7 @@ namespace np_4sem_proj
         public string Serialize()
         {
             string s = JsonConvert.SerializeObject(GetDict(), Formatting.Indented);
-            //s = "";
-            foreach (var i in this.GetDict())
-            {
-                //s += i.Key + ": " + i.Value + "\n";
-            }
-            Console.WriteLine(s);
-            //s = s.Replace("\r\n", "");
-            //s = s.Replace("\"", "");
-
-            return s;//, Formatting.Indented);
+            return s;
         }
         public static Container Deserialize(string json)
         {
