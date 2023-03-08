@@ -43,15 +43,15 @@ namespace np_4sem_proj
             }
             if (!valid)
             {
+                string er = "";
                 foreach (ValidationResult validationResult in
                validationResults)
                 {
-                    Console.WriteLine("{0}",
-                    validationResult.ErrorMessage);
+                    er+= validationResult.ErrorMessage + "\n";
                 }
 
 
-                throw new ArgumentException("something went wrong, try again");
+                throw new ArgumentException(er);
             }
          
         }
@@ -172,27 +172,14 @@ namespace np_4sem_proj
         static public Container Input()
         {
             PropertyInfo[] props = typeof(Container).GetProperties();
-            string[] strings= new string[props.Length];
-            for(int i=0;i<props.Length;i++)
+            string[] strings = new string[props.Length];
+            for (int i = 0; i < props.Length; i++)
             {
                 Console.Write(props[i].Name.ToSnakeCase() + ": ");
                 strings[i] = Console.ReadLine();
             }
             return new Container(strings);
 
-        }
-        public Dictionary<string, string> DictionaryFromType()
-        {
-            if (this == null) return new Dictionary<string, string>();
-            Type t = this.GetType();
-            PropertyInfo[] props = t.GetProperties();
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            foreach (PropertyInfo prp in props)
-            {
-                object value = prp.GetValue(this, new object[] { });
-                dict.Add(prp.Name, value.ToString());
-            }
-            return dict;
         }
         [JsonPropertyName("id")]
         [ValidateId(ErrorMessage = "id should contain only digits")]
