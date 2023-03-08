@@ -170,7 +170,7 @@ namespace np_4sem_proj
             }
             if (sorting_attr == "amount_of_items")
             {
-                containers.Sort((a, b) => int.Parse(a.GetDict()[sorting_attr]).CompareTo(int.Parse(b.GetDict()[sorting_attr])));
+                containers.Sort((a, b) => int.Parse(a.GetStrProp(sorting_attr)).CompareTo(int.Parse(b.GetStrProp(sorting_attr))));
             }
             else if (sorting_attr == "departure_date" || sorting_attr == "arrival_date")
             {

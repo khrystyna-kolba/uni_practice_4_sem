@@ -16,6 +16,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using Newtonsoft.Json;
 using JsonConstructorAttribute = Newtonsoft.Json.JsonConstructorAttribute;
 using System.ComponentModel.Design;
+using Newtonsoft.Json.Linq;
 
 namespace np_4sem_proj
 {
@@ -73,18 +74,52 @@ namespace np_4sem_proj
         public Dictionary<string, string> GetDict()
         {
             if (this == null) return new Dictionary<string, string>();
-            Dictionary<string, string> dict = new Dictionary<string, string>()
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            foreach(var p in GetPropsNames())
             {
-                { "id", Id.ToString() },
-                { "number", Number.ToString() },
-                { "departure_city", DepartureCity.GetName() },
-                { "arrival_city", ArrivalCity.GetName() },
-                { "departure_date", DepartureDate.ToString("dd.MM.yyyy") },
-                { "arrival_date", ArrivalDate.ToString("dd.MM.yyyy") },
-                { "amount_of_items", AmountOfItems.ToString() }
-            };
-
+                dict.Add(p, GetStrProp(p));
+            }
             return dict;
+        }
+        public string GetStrProp(string prop)
+        {
+            if (GetPropsNames().Contains(prop))
+            {
+
+                if (prop == "id")
+                {
+                    return Id.ToString();
+                }
+                else if (prop == "number")
+                {
+                    return Number.ToString();
+                }
+                else if (prop == "departure_city")
+                {
+                    return DepartureCity.GetName();
+                }
+                else if (prop == "arrival_city")
+                {
+                    return ArrivalCity.GetName();
+                }
+                else if (prop == "departure_date")
+                {
+                    return DepartureDate.ToString("dd.MM.yyyy");
+                }
+                else if (prop == "arrival_date")
+                {
+                    return ArrivalDate.ToString("dd.MM.yyyy");
+                }
+                else
+                {
+                    return AmountOfItems.ToString();
+                }
+
+            }
+            else
+            {
+                throw new ArgumentException("cant get, this property doesn't exist");
+            }
         }
         static public List<string> GetPropsNames()
         {
