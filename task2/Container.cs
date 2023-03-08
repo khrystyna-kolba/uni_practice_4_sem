@@ -22,18 +22,17 @@ namespace np_4sem_proj
 {
     public class Container
     {
-        public Container(params string[] p)
+        public Container(Dictionary<string, string> dict)
         {
-            List<string> props = GetPropsNames();
             Dictionary<string, string> errors = new Dictionary<string, string>();
-            for(int i=0; i< props.Count;i++)
+            foreach(var p in dict)
             {
                 try
                 {
-                    SetProp(props[i], p[i]);
+                    SetProp(p.Key, p.Value);
                 }
                 catch(ArgumentException e) {
-                    errors.Add(props[i], e.Message);
+                    errors.Add(p.Key, e.Message);
                 }
             }
             if(errors.Count > 0 )
@@ -54,13 +53,7 @@ namespace np_4sem_proj
         public static Container Deserialize(string json)
         {
             Dictionary<string, string> dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-            string[] s = new string[dict.Count];
-            List<string> props = GetPropsNames();
-            for (int i=0; i<dict.Count; i++)
-            {
-                s[i] = dict[props[i]];
-            }
-            return new Container(s);
+            return new Container(dict);
         }
         public override string ToString()
         {
@@ -178,11 +171,11 @@ namespace np_4sem_proj
         static public Container Input()
         {
             List<string> props = GetPropsNames();
-            string[] strings = new string[props.Count];
+            Dictionary<string, string> strings = new Dictionary<string, string>();
             for (int i = 0; i < props.Count; i++)
             {
                 Console.Write(props[i] + ": ");
-                strings[i] = Console.ReadLine();
+                strings[props[i]] = Console.ReadLine();
             }
             return new Container(strings);
 
