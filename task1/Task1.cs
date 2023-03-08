@@ -40,6 +40,10 @@ namespace np_4sem_proj
         }
         static public List<int> Transform(List<int> lis, int k)
         {
+            if (lis.Count == 0)
+            {
+                return lis;
+            }
             int amax = lis.Select(x => Math.Abs(x)).Max();
             List<int> negative = new List<int>();
             List<int> positive = new List<int>();
