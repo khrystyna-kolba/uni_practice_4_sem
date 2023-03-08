@@ -83,6 +83,7 @@ namespace np_4sem_proj
                             }
                             ids.Remove(id);
                             ids.Add(new_value);
+                            cont.SetProp(prop, new_value);
                             return;
                         }
                         cont.SetProp(prop, new_value);

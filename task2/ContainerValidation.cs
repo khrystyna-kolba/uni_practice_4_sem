@@ -10,43 +10,6 @@ using System.Windows.Markup;
 
 namespace np_4sem_proj
 {
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-    public class ValidateIdAttribute : ValidationAttribute
-    {
-        public override bool IsValid(object value)
-        {
-            var inputid = value as string;
-            foreach(var c in inputid)
-            {
-                if (!Char.IsDigit(c))
-                {
-                    throw new ArgumentException("id should contain only digits");
-                }
-            }
-            return true;
-        }
-    }
-
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-    public class ValidateMinAttribute : ValidationAttribute
-    {
-        public ValidateMinAttribute(int minimumLength)
-            : base()
-        {
-            MinimumLength = minimumLength;
-        }
-        
-        public int MinimumLength { get; }
-        public override bool IsValid(object value)
-        {
-            var inputid = (int) value;
-            if(inputid < MinimumLength)
-            {
-                return false;
-            }
-            return true;
-        }
-    }
     public class ContainerValidation
     {
         public static bool ArrivalDateValidation(DateTime s, DateTime l)

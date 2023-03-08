@@ -21,40 +21,6 @@ namespace np_4sem_proj
 {
     public class Container
     {
-        public Container(string id,string number, City departurecity, City arrivalcity,DateTime departuredate, DateTime arrivaldate, int amountofitems)
-        {
-            this.Id = id;
-            this.Number = number;
-            this.ArrivalCity = arrivalcity;
-            this.DepartureCity = departurecity;
-            this.ArrivalDate = arrivaldate;
-            this.DepartureDate =departuredate;
-            this.AmountOfItems = amountofitems;
-            ValidationContext context = new ValidationContext
-            (this, null, null);
-            List<ValidationResult> validationResults = new
-            List<ValidationResult>();
-            bool valid = Validator.TryValidateObject
-            (this, context, validationResults, true);
-            if (!ContainerValidation.ArrivalDateValidation(departuredate, arrivaldate))
-            {
-                valid = false;
-                validationResults.Add(new ValidationResult("departure date can't be later than arrival date"));
-            }
-            if (!valid)
-            {
-                string er = "";
-                foreach (ValidationResult validationResult in
-               validationResults)
-                {
-                    er+= validationResult.ErrorMessage + "\n";
-                }
-
-
-                throw new ArgumentException(er);
-            }
-         
-        }
         public Container(params string[] p)
         {
             List<string> props = GetPropsNames();
@@ -87,7 +53,13 @@ namespace np_4sem_proj
         public static Container Deserialize(string json)
         {
             Dictionary<string, string> dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-            return new Container(dict["id"], dict["number"], dict["departure_city"], dict["arrival_city"], dict["departure_date"], dict["arrival_date"], dict["amount_of_items"]);
+            string[] s = new string[dict.Count];
+            List<string> props = GetPropsNames();
+            for (int i=0; i<dict.Count; i++)
+            {
+                s[i] = dict[props[i]];
+            }
+            return new Container(s);
         }
         public override string ToString()
         {
@@ -166,37 +138,26 @@ namespace np_4sem_proj
             else
             {
                 throw new ArgumentException("cant set, this property doesn't exist");
-                //Console.WriteLine("cant set, this property does'nt exist");
             }
         }
         static public Container Input()
         {
-            PropertyInfo[] props = typeof(Container).GetProperties();
-            string[] strings = new string[props.Length];
-            for (int i = 0; i < props.Length; i++)
+            List<string> props = GetPropsNames();
+            string[] strings = new string[props.Count];
+            for (int i = 0; i < props.Count; i++)
             {
-                Console.Write(props[i].Name.ToSnakeCase() + ": ");
+                Console.Write(props[i] + ": ");
                 strings[i] = Console.ReadLine();
             }
             return new Container(strings);
 
         }
-        [JsonPropertyName("id")]
-        [ValidateId(ErrorMessage = "id should contain only digits")]
         public string Id { get; set; }
-        [JsonPropertyName("number")]
-        [RegularExpression(@"^[A-Z]{2}-[0-9]{5}$", ErrorMessage = "number invalid representation")]
         public string Number { get; set; }
-        [JsonPropertyName("departure_city")]
         public City DepartureCity { get; set; }
-        [JsonPropertyName("arrival_city")]
         public City ArrivalCity { get; set; }
-        [JsonPropertyName("departure_date")]
         public DateTime DepartureDate { get; set; }
-        [JsonPropertyName("arrival_date")]
         public DateTime ArrivalDate { get; set; }
-        [JsonPropertyName("amount_of_items")]
-        [ValidateMin(0, ErrorMessage = "amount_of_items should be greater than or equal to zero")]
         public int AmountOfItems { get; set; }
 
         public void SetStringAmountOfItems(string a)
