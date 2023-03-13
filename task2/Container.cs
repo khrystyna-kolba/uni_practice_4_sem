@@ -190,68 +190,33 @@ namespace np_4sem_proj
 
         public void SetStringAmountOfItems(string a)
         {
-            if (!ContainerValidation.AmountValidation(a.ToString()))
-            {
-                throw new ArgumentException("amount of items should be non-negative integer");
-            }
-            AmountOfItems = int.Parse(a.ToString());
+           AmountOfItems = ContainerValidation.AmountValidation(a);
         }
         public void SetStringDepartureCity(string city)
         {
-            if (!ContainerValidation.CityValidation(city))
-            {
-                throw new ArgumentException("city is invalid");
-            }
-            DepartureCity = city.TransformCity().Parse();
-    
+            DepartureCity = ContainerValidation.CityValidation(city);
         }
         public void SetStringArrivalCity(string city)
         {
-            if (!ContainerValidation.CityValidation(city))
-            {
-                throw new ArgumentException("city is invalid");
-            }
-            ArrivalCity = city.TransformCity().Parse();
+            ArrivalCity = ContainerValidation.CityValidation(city);
 
         }
         public void SetStringDepartureDate(string d)
         {
-            if (!ContainerValidation.DateValidation(d))
-            {
-                throw new ArgumentException("date is invalid");
-              
-            }
-            DepartureDate = DateTime.Parse(d);
+            DepartureDate = ContainerValidation.DateValidation(d);
         }
         public void SetStringArrivalDate(string d)
         {
-            if (ContainerValidation.DateValidation(d))
-            {
-                if (!ContainerValidation.ArrivalDateValidation(DepartureDate, DateTime.Parse(d)))
-                {
-                    throw new ArgumentException("departure date can't be later than arrival date");
-                }
-                ArrivalDate = DateTime.Parse(d);
-                return;
-                
-            }
-            throw new ArgumentException("date is invalid");
+            DateTime date = ContainerValidation.DateValidation(d);
+            ArrivalDate = ContainerValidation.ArrivalDateValidation(DepartureDate, date);
         }
         public void SetId(string i)
         {
-            if (!ContainerValidation.IdValidation(i))
-            {
-                throw new ArgumentException("id should contain only digits");
-            }
-            Id = i;
+            Id = ContainerValidation.IdValidation(i);
         }
         public void SetNumber(string n)
         {
-            if (!ContainerValidation.NumberValidation(n))
-            {
-                throw new ArgumentException("number should follow pattern AB-12345");
-            }
-            Number = n;
+             Number = ContainerValidation.NumberValidation(n);
         }
 
     }

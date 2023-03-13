@@ -12,66 +12,68 @@ namespace np_4sem_proj
 {
     public class ContainerValidation
     {
-        public static bool ArrivalDateValidation(DateTime s, DateTime l)
+        public static DateTime ArrivalDateValidation(DateTime s, DateTime l)
         {
             if (s > l)
             {
-                return false;
+                throw new ArgumentException("departure date can't be later than arrival date");
             }
-            return true;
+            return l;
         }
-        public static bool NumberValidation(string num)
+        public static string NumberValidation(string num)
         {
             Regex re = new Regex(@"^[A-Z]{2}-[0-9]{5}$");
-            return re.IsMatch(num);
+            if (!re.IsMatch(num)) {
+                throw new ArgumentException("number should follow pattern AB-12345");
+            }
+            return num;
         }
-        public static bool IdValidation(string id)
+        public static string IdValidation(string id)
         {
             foreach (var c in id)
             {
                 if (!Char.IsDigit(c))
                 {
-                    return false;
+                    throw new ArgumentException("id should contain only digits");
                 }
             }
-            return true;
+            return id;
         }
-        public static bool DateValidation(string dt)
+        public static DateTime DateValidation(string dt)
         {
             DateTime res;
             if(DateTime.TryParse(dt, out res))
             {
-                return true;
+                return res;
             }
-            return false;
+            throw new ArgumentException("date is invalid");
         }
 
-        public static bool CityValidation(string city)
+        public static City CityValidation(string city)
         {
             object res;
             if (Enum.TryParse(typeof(City), city.TransformCity(), true, out res))
             {
-                return true;
+                return city.TransformCity().Parse(); ;
             }
-            return false;
+            throw new ArgumentException("city is invalid"); ;
         }
-        public static bool AmountValidation(string amount)
+        public static int AmountValidation(string amount)
         {
             int res;
             if(int.TryParse(amount, out res))
             {
                 if (res >= 0)
                 {
-                    return true;
+                    return res;
                 }
-                return false;
             }
-            return false;
+            throw new ArgumentException("amount of items should be non-negative integer");
         }
         public static bool NewIdValidation(ContainerCollection c, string id)
         {
             if(c.GetIds().Contains(id)){
-                return false;
+               return false;
             }
             return true;
         }

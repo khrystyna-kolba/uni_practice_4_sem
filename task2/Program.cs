@@ -13,6 +13,7 @@ namespace np_4sem_proj
 
         static void Main(string[] args)
         {
+            //Task1.Task_1();
             Task2.Task_2();
         }
     }
