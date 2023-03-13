@@ -1,0 +1,38 @@
+[
+  {
+    "id" : "124454",
+    "number" : "KB-32345",
+    "departure_city" : "LONDON",
+    "arrival_city": "LOS_ANGELES",
+    "departure_date": "05.10.2023",
+    "arrival_date" : "25.10.2023",
+    "amount_of_items" : "3"
+  },
+  {
+    "id" : "123454",
+    "number" : "FD-00745",
+    "departure_city" : "LVIV",
+    "arrival_city": "KYIV",
+    "departure_date": "12.05.2012",
+    "arrival_date" : "06.06.2012",
+    "amount_of_items" : "5"
+  },
+  {
+    "id" : "035593",
+    "number" : "AS-40644",
+    "departure_city" : "PARIS",
+    "arrival_city": "BERLIN",
+    "departure_date": "25.10.2017",
+    "arrival_date" : "07.10.2021",
+    "amount_of_items" : "12"
+  },
+  {
+    "id" : "636549",
+    "number" : "LL-09999",
+    "departure_city" : "KYIV",
+    "arrival_city": "TORONTO",
+    "departure_date": "02.07.2029",
+    "arrival_date" : "12.08.2030",
+    "amount_of_items" : "1000"
+  }
+]
