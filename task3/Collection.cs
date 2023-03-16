@@ -5,20 +5,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Serialization;
+using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Reflection;
 
-namespace np_4sem_proj
+namespace ContainerUniversalTest
 {
-    public class Collection<T> where T : ICollectionClass<T>
+    public class Collection<T> where T : IBaseClass<T>
     {
-        private List<T> containers;
+        private List<T> collection;
         private HashSet<string> ids;
         public Collection(params T[] conts)
         {
-            containers = new List<T>();
+            collection = new List<T>();
             ids = new HashSet<string>();
             foreach (var cont in conts)
             {
-                this.Add(cont);
+                Add(cont);
             }
 
         }
@@ -26,7 +30,7 @@ namespace np_4sem_proj
         {
             if (CollectionValidation<T>.NewIdValidation(this, cont.Id))
             {
-                containers.Add(cont);
+                collection.Add(cont);
                 ids.Add(cont.Id);
             }
             else
@@ -37,7 +41,7 @@ namespace np_4sem_proj
         public override string ToString()
         {
             string res = "";
-            foreach (var cont in containers)
+            foreach (var cont in collection)
             {
                 res += cont.ToString() + "\n";
             }
@@ -48,12 +52,12 @@ namespace np_4sem_proj
         {
             if (ids.Contains(id))
             {
-                foreach (var cont in containers)
+                foreach (var cont in collection)
                 {
                     if (cont.Id == id)
                     {
                         ids.Remove(id);
-                        containers.Remove(cont);
+                        collection.Remove(cont);
                         return;
                     }
                 }
@@ -66,50 +70,63 @@ namespace np_4sem_proj
 
         public void EditById(string id, string prop, string new_value)
         {
-            if (ids.Contains(id))
+            try
             {
-                foreach (var cont in containers)
+                if (ids.Contains(id))
                 {
-                    if (cont.Id == id)
+                    foreach (var cont in collection)
                     {
-                        if (prop == "id" && new_value != id)
+                        if (cont.Id == id)
                         {
-                            if (!CollectionValidation<T>.NewIdValidation(this, new_value))
+                            if (prop == "id" && new_value != id)
                             {
-                                throw new ArgumentException("element with this id already exists");
+                                if (!CollectionValidation<T>.NewIdValidation(this, new_value))
+                                {
+                                    throw new ArgumentException("element with this id already exists");
+                                }
+                                ids.Remove(id);
+                                ids.Add(new_value);
+                                typeof(T).GetProperty(prop.ToPascalCase()).SetValue(this, Convert.ChangeType(new_value, typeof(T).GetProperty(prop.ToPascalCase()).PropertyType));
+                                return;
                             }
-                            ids.Remove(id);
-                            ids.Add(new_value);
-                            cont.SetProp(prop, new_value);
-                            return;
+                            if (typeof(T).GetProperty(prop.ToPascalCase()).PropertyType.IsEnum)
+                            {
+                                typeof(T).GetProperty(prop.ToPascalCase()).SetValue(cont, new_value.ParseCity());
+                            }
+                            else
+                            {
+                                typeof(T).GetProperty(prop.ToPascalCase()).SetValue(cont, Convert.ChangeType(new_value, typeof(T).GetProperty(prop.ToPascalCase()).PropertyType));
+                            }
                         }
-                        cont.SetProp(prop, new_value);
                     }
                 }
+                else
+                {
+                    throw new ArgumentException("element was not edited, element with that id doesn't exist!");
+                }
             }
-            else
+            catch (TargetInvocationException e)
             {
-                throw new ArgumentException("element was not edited, container with that id doesn't exist!");
+                throw new ArgumentException("element was not edited " + e.InnerException.Message);
             }
         }
 
         public void ReadJsonFile(string path)
         {
-            if (SideValidation.FileNameValidation(path, "json"))
+            if (SideValidation.FileNameValidation(path, "json") && SideValidation.FileExist(path))
             {
+
                 string errors = "";
-                containers = new List<T>();
+                collection = new List<T>();
                 ids = new HashSet<string>();
-                string workingDirectory = Environment.CurrentDirectory;
-                string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
-                string text = (File.ReadAllText(projectDirectory + "\\" + path));
-                var jarray = JArray.Parse(text);
-                foreach (var j in jarray)
+                string text = SideValidation.ReadFile(path);
+                List<Dictionary<string, object>> c = System.Text.Json.JsonSerializer.Deserialize<List<Dictionary<string, object>>>(text);
+                foreach (var j in c)
                 {
                     try
                     {
-                        containers.Add((T)T.Deserialize(j.ToString()));
-                        ids.Add(containers[containers.Count - 1].Id);
+                        collection.Add(T.FromDict(j));
+                        ids.Add(collection[collection.Count - 1].Id);
                     }
                     catch (ArgumentException e)
                     {
@@ -129,14 +146,8 @@ namespace np_4sem_proj
         {
             if (SideValidation.FileNameValidation(path, "json"))
             {
-                string workingDirectory = Environment.CurrentDirectory;
-                string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
-                List<Dictionary<string, string>> s = new List<Dictionary<string, string>>();
-                foreach (var c in containers)
-                {
-                    s.Add(c.GetDict());
-                }
-                File.WriteAllText(projectDirectory + "\\" + path, JsonConvert.SerializeObject(s, Formatting.Indented));
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                SideValidation.WriteFile(path, System.Text.Json.JsonSerializer.Serialize(collection, options));
                 return;
 
             }
@@ -146,11 +157,11 @@ namespace np_4sem_proj
         public Collection<T> Search(string search)
         {
             Collection<T> found = new Collection<T>();
-            foreach (var x in containers)
+            foreach (var x in collection)
             {
-                foreach (var i in x.GetDict().Values)
+                foreach (var p in typeof(T).GetProperties())
                 {
-                    if (i.ToString().Contains(search))
+                    if (p.GetValue(x).ToString().ToLower().Contains(search))
                     {
                         found.Add(x);
                         break;
@@ -161,14 +172,22 @@ namespace np_4sem_proj
         }
         public void Sort(string sorting_attr)
         {
-            if (!T.GetPropsNames().Contains(sorting_attr))
+            var snakeCaseStrategy = new SnakeCaseNamingStrategy();
+            sorting_attr = sorting_attr.ToPascalCase();
+            if (!typeof(T).GetProperties().Any(x => x.Name == sorting_attr))
             {
-                sorting_attr = T.GetPropsNames()[0];
-
+                sorting_attr = typeof(T).GetProperties()[0].Name;
             }
-            containers = containers.OrderBy(a => a.GetProp(sorting_attr)).ToList();
+
+            if (typeof(T).GetProperty(sorting_attr).GetType().IsEnum)
+            {
+                collection.Sort((a, b) => (Enum.GetName(typeof(City), (City)typeof(T).GetProperty(sorting_attr).GetValue(b)).CompareTo(Enum.GetName(typeof(City), (City)typeof(T).GetProperty(sorting_attr).GetValue(b)))));
+            }
+            else
+            {
+                collection = collection.OrderBy(a => typeof(T).GetProperty(sorting_attr).GetValue(a)).ToList();
+            }
         }
-      
 
     }
 }

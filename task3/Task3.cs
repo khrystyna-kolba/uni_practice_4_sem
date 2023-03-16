@@ -1,11 +1,11 @@
-﻿using np_4sem_proj.Extension;
+﻿using ContainerUniversalTest.Extension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace np_4sem_proj
+namespace ContainerUniversalTest
 {
     public class Task3
     {

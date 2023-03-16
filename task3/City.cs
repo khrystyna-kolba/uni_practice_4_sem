@@ -1,13 +1,15 @@
-﻿using np_4sem_proj.Extension;
+﻿using ContainerUniversalTest.Extension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace np_4sem_proj
+namespace ContainerUniversalTest
 {
     namespace Extension
     {
@@ -34,25 +36,9 @@ namespace np_4sem_proj
                 }
                 return res;
             }
-            public static string TransformCity(this string e)
+            public static int CompareTo(this City e1, City e2)
             {
-                string res = "";
-                for (int i = 0; i < e.Length; i++)
-                {
-                    if (e[i] != ' ')
-                    {
-                        res = res + char.ToUpper(e[i]);
-                    }
-                    else
-                    {
-                        res = res + "_";
-                    }
-                }
-                return res;
-            }
-            public static City Parse(this string value)
-            {
-                return (City)Enum.Parse(typeof(City), value, true);
+                return e1.GetName().CompareTo(e2.GetName());
             }
         }
     }
