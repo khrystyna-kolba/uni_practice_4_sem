@@ -161,7 +161,7 @@ namespace ContainerUniversalTest
             {
                 foreach (var p in typeof(T).GetProperties())
                 {
-                    if (p.GetValue(x).ToString().ToLower().Contains(search))
+                    if (p.GetValue(x).ToString().ToLower().Contains(search.ToLower()))
                     {
                         found.Add(x);
                         break;
