@@ -1,14 +1,15 @@
-﻿using System;
+﻿using task2np.Extension;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace np_4sem_proj
+namespace task2np
 {
     public class Task2
     {
-        static public void Task_2()
+        public static void Task_2()
         {
             ContainerCollection containers = new ContainerCollection();
             while (true)
@@ -17,9 +18,9 @@ namespace np_4sem_proj
                 {
                     Console.WriteLine("enter your choice \n 1 - read from file \n 2 - search in the current collection of containers \n" +
                         " 3 - add new Container to current collection \n 4 - print current collection \n 5 - sort " +
-                        "collection by property(number by default) \n 6 - delete Container from collection by ID \n 7 " +
+                        "collection by property\n 6 - delete Container from collection by ID \n 7 " +
                         "- edit container by ID \n 8 - write collection to json file \n 9 - exit \n");
-                     string choice = Console.ReadLine();
+                    string choice = Console.ReadLine();
                     if (choice == "1")
                     {
                         Console.WriteLine("Enter file name to read from");
@@ -31,7 +32,7 @@ namespace np_4sem_proj
                         //search
                         Console.WriteLine("Enter value to search: ");
                         string s = Console.ReadLine();
-                        Console.WriteLine("FOUND: \n"+ containers.Search(s));
+                        Console.WriteLine("FOUND: \n" + containers.Search(s));
                     }
                     else if (choice == "3")
                     {
@@ -84,7 +85,8 @@ namespace np_4sem_proj
                         continue;
                     }
                 }
-                catch(ArgumentException e) {
+                catch (ArgumentException e)
+                {
                     Console.WriteLine(e.Message);
                 }
 

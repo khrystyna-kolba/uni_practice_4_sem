@@ -8,34 +8,50 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using static System.Net.Mime.MediaTypeNames;
 using System.Text.Json.Serialization;
-using np_4sem_proj.Extension;
+using task2np.Extension;
 using System.Reflection;
 using System.Text.Json;
 using System.Runtime.InteropServices;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Newtonsoft.Json;
-using JsonConstructorAttribute = Newtonsoft.Json.JsonConstructorAttribute;
+//using JsonConstructorAttribute = Newtonsoft.Json.JsonConstructorAttribute;
 using System.ComponentModel.Design;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
+using System.Runtime.CompilerServices;
+using System.IO;
+using System.Xml.Linq;
 
-namespace np_4sem_proj
+namespace task2np
 {
     public class Container
     {
-        public Container(Dictionary<string, string> dict)
+        public Container(Dictionary<string, object> dict)
         {
             Dictionary<string, string> errors = new Dictionary<string, string>();
             foreach(var p in dict)
             {
                 try
                 {
-                    SetProp(p.Key, p.Value);
+                    if (GetType().GetProperty(p.Key.ToPascalCase()).PropertyType.IsEnum)
+                    {
+                        GetType().GetProperty(p.Key.ToPascalCase()).SetValue(this, p.Value.ToString().ParseCity());
+                    }
+                    else
+                    {
+                        GetType().GetProperty(p.Key.ToPascalCase()).SetValue(this, Convert.ChangeType(p.Value.ToString(), GetType().GetProperty(p.Key.ToPascalCase()).PropertyType));
+                    }
                 }
-                catch(ArgumentException e) {
+                catch (TargetInvocationException e)
+                {
+                    errors.Add(p.Key, e.InnerException.Message);
+                }
+                catch (Exception e)
+                {
                     errors.Add(p.Key, e.Message);
                 }
             }
-            if(errors.Count > 0 )
+            if(errors.Count > 0)
             {
                 string er = "";
                 foreach(var d in errors)
@@ -45,179 +61,98 @@ namespace np_4sem_proj
                 throw new ArgumentException("Container can't be created\n" + er);
             }
         }
-        public string Serialize()
+        public static Container FromDict(Dictionary<string, object> dict)
         {
-            string s = JsonConvert.SerializeObject(GetDict(), Formatting.Indented);
-            return s;
-        }
-        public static Container Deserialize(string json)
-        {
-            Dictionary<string, string> dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            //Dictionary<string, object> dict = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
             return new Container(dict);
         }
         public override string ToString()
         {
             string data = "Container:\n";
-            foreach(var i in this.GetDict())
-            {
-                data += i.Key + ": " + i.Value + "\n";
-            }
-            return data;
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            return data + System.Text.Json.JsonSerializer.Serialize(this, options);
         }
-        public Dictionary<string, string> GetDict()
+        public Dictionary<string, object> GetDict()
         {
-            if (this == null) return new Dictionary<string, string>();
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            foreach(var p in GetPropsNames())
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            foreach(var p in GetType().GetProperties())
             {
-                dict.Add(p, GetStrProp(p));
+                dict.Add(p.Name, p.GetValue(this));
             }
             return dict;
         }
-        public string GetStrProp(string prop)
-        {
-            if (GetPropsNames().Contains(prop))
-            {
-
-                if (prop == "id")
-                {
-                    return Id.ToString();
-                }
-                else if (prop == "number")
-                {
-                    return Number.ToString();
-                }
-                else if (prop == "departure_city")
-                {
-                    return DepartureCity.GetName();
-                }
-                else if (prop == "arrival_city")
-                {
-                    return ArrivalCity.GetName();
-                }
-                else if (prop == "departure_date")
-                {
-                    return DepartureDate.ToString("dd.MM.yyyy");
-                }
-                else if (prop == "arrival_date")
-                {
-                    return ArrivalDate.ToString("dd.MM.yyyy");
-                }
-                else
-                {
-                    return AmountOfItems.ToString();
-                }
-
-            }
-            else
-            {
-                throw new ArgumentException("cant get, this property doesn't exist");
-            }
-        }
-        static public List<string> GetPropsNames()
-        {
-            List<string> res = new List<string>
-            {
-                "id",
-                "number",
-                "departure_city",
-                "arrival_city",
-                "departure_date",
-                "arrival_date",
-                "amount_of_items"
-            };
-            return res;
-        }
-        public void SetProp(string prop, string value)
-        {
-            if (GetPropsNames().Contains(prop))
-            {
-
-                if (prop == "id")
-                {
-                    SetId(value);
-                }
-                else if (prop == "number")
-                {
-                    SetNumber(value);
-                }
-                else if (prop == "departure_city")
-                {
-                    SetStringDepartureCity(value);
-                }
-                else if (prop == "arrival_city")
-                {
-                    SetStringArrivalCity(value);
-                }
-                else if (prop == "departure_date")
-                {
-                    SetStringDepartureDate(value);
-                }
-                else if (prop == "arrival_date")
-                {
-                    SetStringArrivalDate(value);
-                }
-                else
-                {
-                    SetStringAmountOfItems(value);
-                }
-                  
-            }
-            else
-            {
-                throw new ArgumentException("cant set, this property doesn't exist");
-            }
-        }
         static public Container Input()
         {
-            List<string> props = GetPropsNames();
-            Dictionary<string, string> strings = new Dictionary<string, string>();
-            for (int i = 0; i < props.Count; i++)
+            var snakeCaseStrategy = new SnakeCaseNamingStrategy();
+            var p = typeof(Container).GetProperties();
+            Dictionary<string, object> strings = new Dictionary<string, object>();
+            for (int i = 0; i < p.Length; i++)
             {
-                Console.Write(props[i] + ": ");
-                strings[props[i]] = Console.ReadLine();
+                Console.Write(snakeCaseStrategy.GetPropertyName(p[i].Name, false) + ": ");
+                strings[p[i].Name] = Console.ReadLine();
             }
             return new Container(strings);
 
         }
-        public string Id { get; set; }
-        public string Number { get; set; }
+        private string id;
+        private string number;
+        private DateTime arrival_date;
+        private int amount_of_items;
+        [JsonPropertyName("id")]
+        public string Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = ContainerValidation.IdValidation(value);
+            }
+        }
+        [JsonPropertyName("number")]
+        public string Number
+        {
+            get
+            {
+                return number;
+            }
+            set
+            {
+                number = ContainerValidation.NumberValidation(value);
+            }
+        }
+        [JsonPropertyName("departure_city")]
         public City DepartureCity { get; set; }
+        [JsonPropertyName("arrival_city")]
         public City ArrivalCity { get; set; }
+        [JsonPropertyName("departure_date")]
         public DateTime DepartureDate { get; set; }
-        public DateTime ArrivalDate { get; set; }
-        public int AmountOfItems { get; set; }
-
-        public void SetStringAmountOfItems(string a)
+        [JsonPropertyName("arrival_date")]
+        public DateTime ArrivalDate
         {
-           AmountOfItems = ContainerValidation.AmountValidation(a);
+            get
+            {
+                return arrival_date;
+            } 
+            set
+            {
+                arrival_date = ContainerValidation.ArrivalDateValidation(DepartureDate, value);
+            }
         }
-        public void SetStringDepartureCity(string city)
+        [JsonPropertyName("amount_of_items")]
+        public int AmountOfItems
         {
-            DepartureCity = ContainerValidation.CityValidation(city);
-        }
-        public void SetStringArrivalCity(string city)
-        {
-            ArrivalCity = ContainerValidation.CityValidation(city);
-
-        }
-        public void SetStringDepartureDate(string d)
-        {
-            DepartureDate = ContainerValidation.DateValidation(d);
-        }
-        public void SetStringArrivalDate(string d)
-        {
-            DateTime date = ContainerValidation.DateValidation(d);
-            ArrivalDate = ContainerValidation.ArrivalDateValidation(DepartureDate, date);
-        }
-        public void SetId(string i)
-        {
-            Id = ContainerValidation.IdValidation(i);
-        }
-        public void SetNumber(string n)
-        {
-             Number = ContainerValidation.NumberValidation(n);
+            get
+            {
+                return amount_of_items;
+            }
+            set
+            {
+                amount_of_items = ContainerValidation.AmountValidation(value);
+            }
         }
 
+        
     }
 }

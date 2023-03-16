@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using np_4sem_proj.Extension;
+using task2np.Extension;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,20 +8,24 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
+using System.Text.Json;
+using Newtonsoft.Json.Serialization;
+using System.Reflection;
 
-namespace np_4sem_proj
+namespace task2np
 {
     public class ContainerCollection
     {
-        private List<Container> containers;
+        private List<Container> collection;
         private HashSet<string> ids;
         public ContainerCollection(params Container[] conts)
         {
-            containers = new List<Container>();
+            collection = new List<Container>();
             ids = new HashSet<string>();
             foreach (var cont in conts)
             {
-                this.Add(cont);
+                Add(cont);
             }
 
         }
@@ -29,18 +33,18 @@ namespace np_4sem_proj
         {
             if(ContainerValidation.NewIdValidation(this, cont.Id))
             {
-                containers.Add(cont);
+                collection.Add(cont);
                 ids.Add(cont.Id);
             }
             else
             {
-                Console.WriteLine("container was not added!");
+                Console.WriteLine("element was not added!");
             }
         }
         public override string ToString()
         {
             string res = "";
-            foreach (var cont in containers)
+            foreach (var cont in collection)
             {
                 res += cont.ToString() + "\n";
             }
@@ -51,27 +55,26 @@ namespace np_4sem_proj
         {
             if(ids.Contains(id))
             {
-                foreach(var cont in containers)
+                foreach(var cont in collection)
                 {
                     if(cont.Id == id)
                     {
                         ids.Remove(id);
-                        containers.Remove(cont);
+                        collection.Remove(cont);
                         return;
                     }
                 }
             }
             else
             {
-                throw new ArgumentException("container was not deleted, container with that id didn't exist!");
+                throw new ArgumentException("element was not deleted, element with that id didn't exist!");
             }
         }
-
         public void EditById(string id, string prop, string new_value)
         {
             if (ids.Contains(id))
             {
-                foreach (var cont in containers)
+                foreach (var cont in collection)
                 {
                     if (cont.Id == id)
                     {
@@ -83,39 +86,45 @@ namespace np_4sem_proj
                             }
                             ids.Remove(id);
                             ids.Add(new_value);
-                            cont.SetProp(prop, new_value);
+                            typeof(Container).GetProperty(prop.ToPascalCase()).SetValue(this, Convert.ChangeType(new_value, GetType().GetProperty(prop.ToPascalCase()).PropertyType));
                             return;
                         }
-                        cont.SetProp(prop, new_value);
+                        if (typeof(Container).GetProperty(prop.ToPascalCase()).PropertyType.IsEnum)
+                        {
+                            typeof(Container).GetProperty(prop.ToPascalCase()).SetValue(cont, new_value.ParseCity());
+                        }
+                        else
+                        {
+                            typeof(Container).GetProperty(prop.ToPascalCase()).SetValue(cont, Convert.ChangeType(new_value, typeof(Container).GetProperty(prop.ToPascalCase()).PropertyType));
+                        }
                     }
                 }
             }
             else
             {
-                throw new ArgumentException("container was not edited, container with that id doesn't exist!");
+                throw new ArgumentException("element was not edited, element with that id doesn't exist!");
             }
         }
 
         public void ReadJsonFile(string path)
         {
-            if(SideValidation.FileNameValidation(path, "json"))
+            if(SideValidation.FileNameValidation(path, "json") && SideValidation.FileExist(path))
             {
+                
                 string errors = "";
-                containers = new List<Container>();
+                collection = new List<Container>();
                 ids = new HashSet<string>();
-                string workingDirectory = Environment.CurrentDirectory;
-                string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
-                string text = (File.ReadAllText(projectDirectory + "\\" + path));
-                var jarray = JArray.Parse(text);
-                foreach (var j in jarray)
+                string text = SideValidation.ReadFile(path);
+                List<Dictionary<string, object>> c = System.Text.Json.JsonSerializer.Deserialize<List<Dictionary<string, object>>>(text);
+                foreach (var j in c)
                 {
                     try
                     {
-                        containers.Add(Container.Deserialize(j.ToString()));
-                        ids.Add(containers[containers.Count - 1].Id);
+                        collection.Add(new Container(j));
+                        ids.Add(collection[collection.Count - 1].Id);
                     }
                     catch(ArgumentException e) {
-                        errors += "Errors in container!!:\n" + e.Message + "\n";
+                        errors += "Errors in element!!:\n" + e.Message + "\n";
                     }
                 }
                 if(errors.Length > 0)
@@ -131,14 +140,8 @@ namespace np_4sem_proj
         {
             if (SideValidation.FileNameValidation(path, "json"))
             {
-                string workingDirectory = Environment.CurrentDirectory;
-                string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
-                List<Dictionary<string, string>> s = new List<Dictionary<string, string>>();
-                foreach (var c in containers)
-                {
-                    s.Add(c.GetDict());
-                }
-                File.WriteAllText(projectDirectory + "\\" + path, JsonConvert.SerializeObject(s, Formatting.Indented));
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                SideValidation.WriteFile(path, System.Text.Json.JsonSerializer.Serialize(collection, options));
                 return;
 
             }
@@ -148,11 +151,11 @@ namespace np_4sem_proj
         public ContainerCollection Search(string search)
         {
             ContainerCollection found = new ContainerCollection();
-            foreach(var x in containers)
+            foreach(var x in collection)
             {
-                foreach(var i in x.GetDict().Values)
+                foreach (var p in typeof(Container).GetProperties())
                 {
-                    if (i.ToString().Contains(search))
+                    if (p.GetValue(x).ToString().ToLower().Contains(search.ToLower()))
                     {
                         found.Add(x);
                         break;
@@ -161,24 +164,22 @@ namespace np_4sem_proj
             }
             return found;
         }
-        public void Sort(string sorting_attr = "number")
+        public void Sort(string sorting_attr)
         {
-            if (!Container.GetPropsNames().Contains(sorting_attr))
+            var snakeCaseStrategy = new SnakeCaseNamingStrategy();
+            sorting_attr = sorting_attr.ToPascalCase();
+            if (!typeof(Container).GetProperties().Any(x => x.Name == sorting_attr))
             {
-                sorting_attr = "number";
-                
+                sorting_attr = typeof(Container).GetProperties()[0].Name;
             }
-            if (sorting_attr == "amount_of_items")
+
+            if (typeof(Container).GetProperty(sorting_attr).GetType().IsEnum)
             {
-                containers.Sort((a, b) => int.Parse(a.GetStrProp(sorting_attr)).CompareTo(int.Parse(b.GetStrProp(sorting_attr))));
-            }
-            else if (sorting_attr == "departure_date" || sorting_attr == "arrival_date")
-            {
-                containers.Sort((a, b) => DateTime.Parse(a.GetDict()[sorting_attr]).CompareTo(DateTime.Parse(b.GetDict()[sorting_attr])));
+                collection.Sort((a, b) => (Enum.GetName(typeof(City), (City)typeof(Container).GetProperty(sorting_attr).GetValue(b)).CompareTo(Enum.GetName(typeof(City), (City)typeof(Container).GetProperty(sorting_attr).GetValue(b)))));
             }
             else
             {
-                containers.Sort((a, b) => a.GetDict()[sorting_attr].ToLower().CompareTo(b.GetDict()[sorting_attr].ToLower()));
+                collection = collection.OrderBy(a => typeof(Container).GetProperty(sorting_attr).GetValue(a)).ToList();
             }
         }
 

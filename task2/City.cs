@@ -1,12 +1,15 @@
-﻿using System;
+﻿using task2np.Extension;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace np_4sem_proj
+namespace task2np
 {
     namespace Extension
     {
@@ -22,7 +25,7 @@ namespace np_4sem_proj
                     {
                         res = res + " ";
                     }
-                    else if ( i!=0 && name[i-1] != '_')
+                    else if (i != 0 && name[i - 1] != '_')
                     {
                         res = res + char.ToLower(name[i]);
                     }
@@ -33,50 +36,32 @@ namespace np_4sem_proj
                 }
                 return res;
             }
-            public static string TransformCity(this string e)
+            public static int CompareTo(this City e1, City e2)
             {
-                string res = "";
-                for(int i = 0; i< e.Length; i++)
-                {
-                    if(e[i] != ' ')
-                    {
-                        res = res + char.ToUpper(e[i]);
-                    }
-                    else
-                    {
-                        res = res + "_";
-                    }
-                }
-                return res;
-            }
-            public static City Parse(this string value)
-            {
-                return (City)Enum.Parse(typeof(City), value, true);
+                return e1.GetName().CompareTo(e2.GetName());
             }
         }
     }
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum City
     {
-        [EnumMember(Value = "New York")]
-        NEW_YORK,
-        [EnumMember(Value = "Los Angeles")]
-        LOS_ANGELES,
-        [EnumMember(Value = "Kyiv")]
-        KYIV,
-        [EnumMember(Value = "Lviv")]
-        LVIV,
-        [EnumMember(Value = "London")]
-        LONDON,
         [EnumMember(Value = "Berlin")]
         BERLIN,
+        [EnumMember(Value = "Kyiv")]
+        KYIV,
+        [EnumMember(Value = "London")]
+        LONDON,
+        [EnumMember(Value = "Los Angeles")]
+        LOS_ANGELES,
+        [EnumMember(Value = "Lviv")]
+        LVIV,
+        [EnumMember(Value = "New York")]
+        NEW_YORK,
         [EnumMember(Value = "Paris")]
         PARIS,
         [EnumMember(Value = "Toronto")]
         TORONTO
-
     }
-    //internal class City
-    //{
-    //}
+
+    
 }
