@@ -26,7 +26,7 @@ namespace pattern_proxy_np.models.Proxy
             {
                 return auth.CurrentUser.Role == Role.admin;
             }
-            throw new AccessViolationException("forbidden");
+            throw new AccessViolationException("unauthorized");
         }
         public bool CheckCustomerAccess()
         {
@@ -34,7 +34,7 @@ namespace pattern_proxy_np.models.Proxy
             {
                 return auth.CurrentUser.Role == Role.customer;
             }
-            throw new AccessViolationException("forbidden");
+            throw new AccessViolationException("unauthorized");
         }
         public Collection<Container>? Search(string s)
         {
@@ -42,7 +42,7 @@ namespace pattern_proxy_np.models.Proxy
             {
                 return subject.Search(s);
             }
-            return null;
+            throw new AccessViolationException("forbidden");
         }
         public Collection<Container> Sort(string sort_by)
         {
@@ -50,7 +50,7 @@ namespace pattern_proxy_np.models.Proxy
             {
                 return subject.Sort(sort_by);
             }
-            return null;
+            throw new AccessViolationException("forbidden");
         }
         public Container ViewById(string id)
         {
@@ -58,7 +58,7 @@ namespace pattern_proxy_np.models.Proxy
             {
                 return subject.ViewById(id);
             }
-            return null;
+            throw new AccessViolationException("forbidden");
         }
         public Collection<Container> ViewList()
         {
@@ -66,7 +66,7 @@ namespace pattern_proxy_np.models.Proxy
             {
                 return subject.ViewList();
             }
-            return null;
+            throw new AccessViolationException("forbidden");
         }
         public Container Edit(string id, string prop, string new_value)
         {
@@ -74,7 +74,7 @@ namespace pattern_proxy_np.models.Proxy
             {
                 return subject.Edit(id, prop, new_value);
             }
-            return null;
+            throw new AccessViolationException("forbidden");
         }
         public Container Delete(string id)
         {
@@ -82,7 +82,7 @@ namespace pattern_proxy_np.models.Proxy
             {
                 return subject.Delete(id);
             }
-            return null;
+            throw new AccessViolationException("forbidden");
         }
         public Container Create()
         {
@@ -90,7 +90,7 @@ namespace pattern_proxy_np.models.Proxy
             {
                 return subject.Create();
             }
-            return null;
+            throw new AccessViolationException("forbidden");
         }
         public void ReadFromJsonFile(string fileName)
         {
@@ -98,6 +98,7 @@ namespace pattern_proxy_np.models.Proxy
             {
                 subject.ReadFromJsonFile(fileName);
             }
+            throw new AccessViolationException("forbidden");
         }
         public void WriteToJsonFile(string fileName)
         {
@@ -105,6 +106,7 @@ namespace pattern_proxy_np.models.Proxy
             {
                 subject.WriteToJsonFile(fileName);
             }
+            throw new AccessViolationException("forbidden");
         }
     }
 }

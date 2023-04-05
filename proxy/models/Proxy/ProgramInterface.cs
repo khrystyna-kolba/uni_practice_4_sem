@@ -82,6 +82,13 @@ namespace pattern_proxy_np.models.Proxy
 
             auth.Login(email, password);
         }
+
+        private void ViewById()
+        {
+            Console.WriteLine("Enter id to view");
+            string id = Console.ReadLine();
+            Console.WriteLine(proxy.ViewById(id));
+        }
         private void Logout()
         {
             auth.Logout();
@@ -101,7 +108,7 @@ namespace pattern_proxy_np.models.Proxy
                         " 3 - create new Container and add to current collection \n 4 - print current collection \n 5 - sort " +
                         "collection by property\n 6 - delete Container from collection by ID \n 7 " +
                         "- edit container by ID \n 8 - write collection to json file \n" +
-                        " 9 - login \n 10 - logout \n 11 - register \n 12 - exit \n");
+                        " 9 - view by id \n 10 - login \n 11 - logout \n 12 - register \n 13 - exit \n");
                     string choice = Console.ReadLine();
                     if (choice == "1")
                     {
@@ -136,19 +143,23 @@ namespace pattern_proxy_np.models.Proxy
                     {
                         WriteFile();
                     }
-                    else if (choice == "12")
+                    else if (choice == "13")
                     {
                         break;
                     }
                     else if (choice == "9")
                     {
-                        Login();
+                        ViewById();
                     }
                     else if (choice == "10")
                     {
-                        Logout();
+                        Login();
                     }
                     else if (choice == "11")
+                    {
+                        Logout();
+                    }
+                    else if (choice == "12")
                     {
                         Register();
                     }
