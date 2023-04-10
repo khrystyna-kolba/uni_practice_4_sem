@@ -1,0 +1,150 @@
+
+
+Khrystyna Kolba 11.04.2023 0:51:03 ReadFromJsonFile file: data.json Container:
+{
+  "id": "124454",
+  "number": "KB-32345",
+  "departure_city": "London",
+  "arrival_city": "Los Angeles",
+  "departure_date": "2023-10-11T00:00:00",
+  "arrival_date": "2023-10-25T00:00:00",
+  "amount_of_items": 3
+}
+Container:
+{
+  "id": "123454",
+  "number": "FD-00745",
+  "departure_city": "Lviv",
+  "arrival_city": "Kyiv",
+  "departure_date": "2012-05-05T00:00:00",
+  "arrival_date": "2012-06-06T00:00:00",
+  "amount_of_items": 5
+}
+Container:
+{
+  "id": "035593",
+  "number": "AS-40644",
+  "departure_city": "Paris",
+  "arrival_city": "Berlin",
+  "departure_date": "2017-10-25T00:00:00",
+  "arrival_date": "2021-10-07T00:00:00",
+  "amount_of_items": 12
+}
+Container:
+{
+  "id": "636549",
+  "number": "LL-09999",
+  "departure_city": "Kyiv",
+  "arrival_city": "Toronto",
+  "departure_date": "2029-07-02T00:00:00",
+  "arrival_date": "2030-08-12T00:00:00",
+  "amount_of_items": 1000
+}
+
+Khrystyna Kolba 11.04.2023 0:51:07 ViewList 
+ Draft Container:
+{
+  "id": "124454",
+  "number": "KB-32345",
+  "departure_city": "London",
+  "arrival_city": "Los Angeles",
+  "departure_date": "2023-10-11T00:00:00",
+  "arrival_date": "2023-10-25T00:00:00",
+  "amount_of_items": 3
+}
+Container:
+{
+  "id": "123454",
+  "number": "FD-00745",
+  "departure_city": "Lviv",
+  "arrival_city": "Kyiv",
+  "departure_date": "2012-05-05T00:00:00",
+  "arrival_date": "2012-06-06T00:00:00",
+  "amount_of_items": 5
+}
+Container:
+{
+  "id": "035593",
+  "number": "AS-40644",
+  "departure_city": "Paris",
+  "arrival_city": "Berlin",
+  "departure_date": "2017-10-25T00:00:00",
+  "arrival_date": "2021-10-07T00:00:00",
+  "amount_of_items": 12
+}
+Container:
+{
+  "id": "636549",
+  "number": "LL-09999",
+  "departure_city": "Kyiv",
+  "arrival_city": "Toronto",
+  "departure_date": "2029-07-02T00:00:00",
+  "arrival_date": "2030-08-12T00:00:00",
+  "amount_of_items": 1000
+}
+
+Khrystyna Kolba 11.04.2023 0:51:21 Publish admin id: 124454 
+ Container:
+{
+  "id": "124454",
+  "number": "KB-32345",
+  "departure_city": "London",
+  "arrival_city": "Los Angeles",
+  "departure_date": "2023-10-11T00:00:00",
+  "arrival_date": "2023-10-25T00:00:00",
+  "amount_of_items": 3
+}
+Khrystyna Kolba 11.04.2023 0:51:33 Publish admin id: 123454 
+ Container:
+{
+  "id": "123454",
+  "number": "FD-00745",
+  "departure_city": "Lviv",
+  "arrival_city": "Kyiv",
+  "departure_date": "2012-05-05T00:00:00",
+  "arrival_date": "2012-06-06T00:00:00",
+  "amount_of_items": 5
+}
+Khrystyna Kolba 11.04.2023 0:51:39 Publish admin id: 035593 
+ Container:
+{
+  "id": "035593",
+  "number": "AS-40644",
+  "departure_city": "Paris",
+  "arrival_city": "Berlin",
+  "departure_date": "2017-10-25T00:00:00",
+  "arrival_date": "2021-10-07T00:00:00",
+  "amount_of_items": 12
+}
+Tetiana Stoyko 11.04.2023 0:52:12 ViewList 
+ Published Container:
+{
+  "id": "124454",
+  "number": "KB-32345",
+  "departure_city": "London",
+  "arrival_city": "Los Angeles",
+  "departure_date": "2023-10-11T00:00:00",
+  "arrival_date": "2023-10-25T00:00:00",
+  "amount_of_items": 3
+}
+Container:
+{
+  "id": "123454",
+  "number": "FD-00745",
+  "departure_city": "Lviv",
+  "arrival_city": "Kyiv",
+  "departure_date": "2012-05-05T00:00:00",
+  "arrival_date": "2012-06-06T00:00:00",
+  "amount_of_items": 5
+}
+Container:
+{
+  "id": "035593",
+  "number": "AS-40644",
+  "departure_city": "Paris",
+  "arrival_city": "Berlin",
+  "departure_date": "2017-10-25T00:00:00",
+  "arrival_date": "2021-10-07T00:00:00",
+  "amount_of_items": 12
+}
+
