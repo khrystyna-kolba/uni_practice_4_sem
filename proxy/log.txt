@@ -1,0 +1,172 @@
+Tetiana Stoyko 05.04.2023 10:27:19 ViewList 
+ Container:
+{
+  "id": "123454",
+  "number": "FD-00745",
+  "departure_city": "Lviv",
+  "arrival_city": "Kyiv",
+  "departure_date": "2012-05-05T00:00:00",
+  "arrival_date": "2012-06-06T00:00:00",
+  "amount_of_items": 5
+}
+Container:
+{
+  "id": "035593",
+  "number": "AS-40644",
+  "departure_city": "Paris",
+  "arrival_city": "Berlin",
+  "departure_date": "2017-10-25T00:00:00",
+  "arrival_date": "2021-10-07T00:00:00",
+  "amount_of_items": 12
+}
+Container:
+{
+  "id": "636549",
+  "number": "LL-09999",
+  "departure_city": "Kyiv",
+  "arrival_city": "Toronto",
+  "departure_date": "2029-07-02T00:00:00",
+  "arrival_date": "2030-08-12T00:00:00",
+  "amount_of_items": 1000
+}
+
+Tetiana Stoyko 05.04.2023 10:27:56 Search search: 07 
+ Container:
+{
+  "id": "123454",
+  "number": "FD-00745",
+  "departure_city": "Lviv",
+  "arrival_city": "Kyiv",
+  "departure_date": "2012-05-05T00:00:00",
+  "arrival_date": "2012-06-06T00:00:00",
+  "amount_of_items": 5
+}
+Container:
+{
+  "id": "035593",
+  "number": "AS-40644",
+  "departure_city": "Paris",
+  "arrival_city": "Berlin",
+  "departure_date": "2017-10-25T00:00:00",
+  "arrival_date": "2021-10-07T00:00:00",
+  "amount_of_items": 12
+}
+Container:
+{
+  "id": "636549",
+  "number": "LL-09999",
+  "departure_city": "Kyiv",
+  "arrival_city": "Toronto",
+  "departure_date": "2029-07-02T00:00:00",
+  "arrival_date": "2030-08-12T00:00:00",
+  "amount_of_items": 1000
+}
+
+Tetiana Stoyko 05.04.2023 10:28:15 Search search: 99 
+ Container:
+{
+  "id": "636549",
+  "number": "LL-09999",
+  "departure_city": "Kyiv",
+  "arrival_city": "Toronto",
+  "departure_date": "2029-07-02T00:00:00",
+  "arrival_date": "2030-08-12T00:00:00",
+  "amount_of_items": 1000
+}
+
+Tetiana Stoyko 05.04.2023 10:28:27 Sort sort_by: departure_city 
+ Container:
+{
+  "id": "636549",
+  "number": "LL-09999",
+  "departure_city": "Kyiv",
+  "arrival_city": "Toronto",
+  "departure_date": "2029-07-02T00:00:00",
+  "arrival_date": "2030-08-12T00:00:00",
+  "amount_of_items": 1000
+}
+Container:
+{
+  "id": "123454",
+  "number": "FD-00745",
+  "departure_city": "Lviv",
+  "arrival_city": "Kyiv",
+  "departure_date": "2012-05-05T00:00:00",
+  "arrival_date": "2012-06-06T00:00:00",
+  "amount_of_items": 5
+}
+Container:
+{
+  "id": "035593",
+  "number": "AS-40644",
+  "departure_city": "Paris",
+  "arrival_city": "Berlin",
+  "departure_date": "2017-10-25T00:00:00",
+  "arrival_date": "2021-10-07T00:00:00",
+  "amount_of_items": 12
+}
+
+Khrystyna Kolba 05.04.2023 10:30:27 Create 
+ Container:
+{
+  "id": "65444",
+  "number": "HG-12334",
+  "departure_city": "Lviv",
+  "arrival_city": "Toronto",
+  "departure_date": "2022-04-03T00:00:00",
+  "arrival_date": "2023-01-02T00:00:00",
+  "amount_of_items": 45
+}
+Khrystyna Kolba 05.04.2023 10:30:33 ViewList 
+ Container:
+{
+  "id": "636549",
+  "number": "LL-09999",
+  "departure_city": "Kyiv",
+  "arrival_city": "Toronto",
+  "departure_date": "2029-07-02T00:00:00",
+  "arrival_date": "2030-08-12T00:00:00",
+  "amount_of_items": 1000
+}
+Container:
+{
+  "id": "123454",
+  "number": "FD-00745",
+  "departure_city": "Lviv",
+  "arrival_city": "Kyiv",
+  "departure_date": "2012-05-05T00:00:00",
+  "arrival_date": "2012-06-06T00:00:00",
+  "amount_of_items": 5
+}
+Container:
+{
+  "id": "035593",
+  "number": "AS-40644",
+  "departure_city": "Paris",
+  "arrival_city": "Berlin",
+  "departure_date": "2017-10-25T00:00:00",
+  "arrival_date": "2021-10-07T00:00:00",
+  "amount_of_items": 12
+}
+Container:
+{
+  "id": "65444",
+  "number": "HG-12334",
+  "departure_city": "Lviv",
+  "arrival_city": "Toronto",
+  "departure_date": "2022-04-03T00:00:00",
+  "arrival_date": "2023-01-02T00:00:00",
+  "amount_of_items": 45
+}
+
+Khrystyna Kolba 05.04.2023 10:31:16 Delete id: 65444 
+ Container:
+{
+  "id": "65444",
+  "number": "HG-12334",
+  "departure_city": "Lviv",
+  "arrival_city": "Toronto",
+  "departure_date": "2022-04-03T00:00:00",
+  "arrival_date": "2023-01-02T00:00:00",
+  "amount_of_items": 45
+}
