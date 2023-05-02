@@ -1,0 +1,14 @@
+2023-05-02 19:12:25.346 +03:00 [ERR] im here
+
+2023-05-03 00:22:36.793 +03:00 [INF] Admin Khrystyna Kolba GetContainers 5
+
+2023-05-03 00:23:06.151 +03:00 [INF] Admin Khrystyna Kolba ViewByID f630d56e-6315-4382-b401-ff43e641133c
+
+2023-05-03 00:23:08.818 +03:00 [ERR] Admin Khrystyna Kolba ViewByID f630d56e-6315-4382-b433c
+
+2023-05-03 00:23:58.433 +03:00 [INF] Admin Khrystyna Kolba AddContainer aaf349db-131c-402c-944b-615990686ac5
+
+2023-05-03 00:24:05.365 +03:00 [ERR] Admin Khrystyna Kolba AddContainer Container can't be created
+departure_date: String '20771-02-03' was not recognized as a valid DateTime.
+
+
