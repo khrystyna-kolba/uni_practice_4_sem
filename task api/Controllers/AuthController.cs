@@ -14,7 +14,7 @@ using ContainersApiTask.Migrations;
 
 namespace ContainersApiTask.Controllers
 {
-
+    [Produces("application/xml")]
     [ApiController]
     [Route("[controller]")]
     public class AuthController : Controller
@@ -96,24 +96,6 @@ namespace ContainersApiTask.Controllers
             {
                 return Conflict($"Email {registerRequest.Email} is already registered.");
             }
-
-    //        Dictionary<string, object> dictt = new Dictionary<string, object>()
-    //        { {"id", Guid.NewGuid().ToString() },
-    //        { "email", registerRequest.Email},
-    //            {"role" , "customer" },
-    //            {"first_name", registerRequest.FirstName},
-    //            {"last_name",registerRequest.LastName },
-    //            {"password",registerRequest.Password
-    //}
-    //        };
-    //        try
-    //        {
-    //            var newUserCheck = new UserV(dictt);
-    //        }
-    //        catch (ArgumentException e)
-    //        {
-    //            return BadRequest(e.Message);
-    //        }
             var newUser = new User
             {
                 Email = registerRequest.Email,

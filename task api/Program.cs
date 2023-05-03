@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Text.Json;
 using Serilog;
 using ContainersApiTask.Middleware;
+using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ContainersApiTask
 {
@@ -30,12 +32,25 @@ namespace ContainersApiTask
 
             builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
             
-            builder.Services.AddControllers().AddJsonOptions(x =>
-                           x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+            //builder.Services.AddControllers().AddJsonOptions(x =>
+             //              x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 
-            builder.Services.AddControllers().AddXmlDataContractSerializerFormatters();
-
+            builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+            new BadRequestObjectResult(context.ModelState)
+            {
+                ContentTypes =
+                {
+                    // using static System.Net.Mime.MediaTypeNames;
+                    //Application.Json,
+                    Application.Xml
+                }
+            };
+    })
+    .AddXmlDataContractSerializerFormatters();
             builder.Services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;

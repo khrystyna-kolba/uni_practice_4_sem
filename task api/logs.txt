@@ -192,3 +192,12 @@ departure_date: String '20771-02-03' was not recognized as a valid DateTime.
 2023-05-03 20:02:31.535 +03:00 [ERR] Bad Request by Admin Khrystyna Kolba executed AddContainer
 
 
+2023-05-03 20:40:37.067 +03:00 [INF] Viewed by Customer Pussy Cat executed GetContainers
+ search:  sortby: 
+
+2023-05-03 20:43:10.946 +03:00 [INF] Viewed by Customer Pussy Cat executed GetContainers
+ search:  sortby: 
+
+2023-05-03 20:43:39.751 +03:00 [INF] Viewed by Customer Pussy Cat executed GetContainers
+ search:  sortby: 
+
