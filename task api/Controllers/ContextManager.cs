@@ -22,7 +22,7 @@ namespace ContainersApiTask.Controllers
         }
         public async Task<(RequestStatus, IActionResult)> GetAllContainers(QueryRequest? q)
         {
-            //_loggerProxy.LogInfo(user, nameof(GetContainers), r.LongCount().ToString());
+            //_loggerManager.LogInfo(user, nameof(GetContainers), r.LongCount().ToString());
             return (RequestStatus.VIEWED, Ok(FilterByQuery<Container>(q, _context.Containers)));
         }
         public async Task<(RequestStatus, IActionResult)> ViewAllById(string id)

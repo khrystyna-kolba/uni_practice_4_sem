@@ -21,7 +21,7 @@ namespace ContainersApiTask.Controllers
         private AppDbContext _context;
         private UserManager<User> _userManager;
         private PermissionProxy _permissionProxy;
-        private LoggerManager _loggerProxy;
+        private LoggerManager _loggerManager;
         private ContextManager _contextManager;
         public ContainerController(ILogger<ContainerController> logger, AppDbContext context, UserManager<User> userManager)
         {
@@ -30,7 +30,7 @@ namespace ContainersApiTask.Controllers
             _userManager = userManager;
             _contextManager = new ContextManager(context);
             _permissionProxy = new PermissionProxy(_userManager, _contextManager);
-            _loggerProxy = new LoggerManager(userManager);
+            _loggerManager = new LoggerManager(userManager);
         }
 
 
@@ -45,9 +45,9 @@ namespace ContainersApiTask.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             _permissionProxy.CurrentUser = user;
-            _loggerProxy.CurrentUser = user;
+            _loggerManager.CurrentUser = user;
             var res = await _permissionProxy.GetContainers(q);
-            _loggerProxy.MakeLog(res.Item1, nameof(GetContainers), q.ToString());
+            _loggerManager.MakeLog(res.Item1, nameof(GetContainers), q.ToString());
             return res.Item2;
         }
         [HttpPut("container")]
@@ -56,9 +56,9 @@ namespace ContainersApiTask.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             _permissionProxy.CurrentUser = user;
-            _loggerProxy.CurrentUser = user;
+            _loggerManager.CurrentUser = user;
             var res = await _permissionProxy.EditContainer(Id, cont);
-            _loggerProxy.MakeLog(res.Item1, nameof(EditContainer), $"id of container: {Id}");
+            _loggerManager.MakeLog(res.Item1, nameof(EditContainer), $"id of container: {Id}");
             return res.Item2;
         }
         [HttpPost("publish")]
@@ -67,9 +67,9 @@ namespace ContainersApiTask.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             _permissionProxy.CurrentUser = user;
-            _loggerProxy.CurrentUser = user;
+            _loggerManager.CurrentUser = user;
             var res = await _permissionProxy.PublishContainer(id);
-            _loggerProxy.MakeLog(res.Item1, nameof(PublishContainer), $"id of container: {id}");
+            _loggerManager.MakeLog(res.Item1, nameof(PublishContainer), $"id of container: {id}");
             return res.Item2;
         }
         [HttpDelete("container")]
@@ -78,9 +78,9 @@ namespace ContainersApiTask.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             _permissionProxy.CurrentUser = user;
-            _loggerProxy.CurrentUser = user;
+            _loggerManager.CurrentUser = user;
             var res = await _permissionProxy.DeleteContainer(id);
-            _loggerProxy.MakeLog(res.Item1, nameof(DeleteContainer), $"id of container: {id}");
+            _loggerManager.MakeLog(res.Item1, nameof(DeleteContainer), $"id of container: {id}");
             return res.Item2;
         }
 
@@ -89,9 +89,9 @@ namespace ContainersApiTask.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             _permissionProxy.CurrentUser = user;
-            _loggerProxy.CurrentUser = user;
+            _loggerManager.CurrentUser = user;
             var res = await _permissionProxy.ViewById(id);
-            _loggerProxy.MakeLog(res.Item1, nameof(ViewById), $"id of container: {id}");
+            _loggerManager.MakeLog(res.Item1, nameof(ViewById), $"id of container: {id}");
             return res.Item2;
         }
 
@@ -101,9 +101,9 @@ namespace ContainersApiTask.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             _permissionProxy.CurrentUser = user;
-            _loggerProxy.CurrentUser = user;
+            _loggerManager.CurrentUser = user;
             var res = await _permissionProxy.AddContainer(cont);
-            _loggerProxy.MakeLog(res.Item1, nameof(AddContainer));
+            _loggerManager.MakeLog(res.Item1, nameof(AddContainer));
             return res.Item2;
         }
     }
