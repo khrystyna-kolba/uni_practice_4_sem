@@ -1,8 +1,8 @@
 ﻿namespace ContainersApiTask.Models
 {
-    public class Query
+    public class QueryRequest
     {
-        public Query()
+        public QueryRequest()
         {
             search = "";
             sortBy = "";

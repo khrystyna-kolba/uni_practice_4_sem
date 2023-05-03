@@ -32,7 +32,7 @@ using ContainersApiTask.Models.Enumerations;
 namespace ContainersApiTask.Models.Containers
 {
     [DataContract]
-    public class Container : IBaseClass<Container>
+    public class Container
     {
         private IState _state = new Draft();
         public IState GetState() { return _state; }
@@ -91,6 +91,10 @@ namespace ContainersApiTask.Models.Containers
                 catch (TargetInvocationException e)
                 {
                     errors.Add(p.Key, e.InnerException.Message);
+                }
+                catch (NullReferenceException e)
+                {
+                    errors.Add(p.Key, "field was blank");
                 }
                 catch (Exception e)
                 {

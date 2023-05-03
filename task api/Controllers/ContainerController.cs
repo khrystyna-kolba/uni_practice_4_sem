@@ -1,8 +1,8 @@
 ﻿using ContainersApiTask.Migrations;
 using ContainersApiTask.Models;
 using ContainersApiTask.Models.Containers;
-using ContainersApiTask.Models.Proxy;
 using ContainersApiTask.Models.State;
+using ContainersApiTask.Proxy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -41,7 +41,7 @@ namespace ContainersApiTask.Controllers
         }
 
         [HttpGet("containers")]
-        public async Task<IActionResult>  GetContainers([FromQuery] Query q)
+        public async Task<IActionResult>  GetContainers([FromQuery] QueryRequest q)
         {
             var user = await _userManager.GetUserAsync(User);
             _permissionProxy.CurrentUser = user;

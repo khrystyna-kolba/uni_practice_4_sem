@@ -1,5 +1,5 @@
 ﻿using ContainersApiTask.Models.Containers;
-using ContainersApiTask.Models.Proxy;
+using ContainersApiTask.Proxy;
 using System;
 using System.Collections.Generic;
 using System.Linq;

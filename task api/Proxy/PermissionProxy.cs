@@ -73,7 +73,7 @@ namespace ContainersApiTask.Proxy
             }
             return (RequestStatus.FORBIDDEN, Forbid());
         }
-        public async Task<(RequestStatus, IActionResult)> GetContainers(Query? q)
+        public async Task<(RequestStatus, IActionResult)> GetContainers(QueryRequest? q)
         {
             if (role == "Admin" || role == "Manager")
             {

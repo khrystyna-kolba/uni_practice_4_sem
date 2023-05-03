@@ -1,4 +1,4 @@
-﻿using ContainersApiTask.Models.Proxy;
+﻿using ContainersApiTask.Proxy;
 using ContainersApiTask.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,11 +16,11 @@ namespace ContainersApiTask.Controllers
             _context = context;
         }
 
-        public async Task<(RequestStatus, IActionResult)> GetPublishedContainers(Query? q)
+        public async Task<(RequestStatus, IActionResult)> GetPublishedContainers(QueryRequest? q)
         {
             return (RequestStatus.VIEWED, Ok(FilterByQuery<PublishedContainer>(q, _context.PublishedContainers)));
         }
-        public async Task<(RequestStatus, IActionResult)> GetAllContainers(Query? q)
+        public async Task<(RequestStatus, IActionResult)> GetAllContainers(QueryRequest? q)
         {
             //_loggerProxy.LogInfo(user, nameof(GetContainers), r.LongCount().ToString());
             return (RequestStatus.VIEWED, Ok(FilterByQuery<Container>(q, _context.Containers)));
@@ -135,7 +135,7 @@ namespace ContainersApiTask.Controllers
 
             return new Container(dict);
         }
-        public IEnumerable<T> FilterByQuery<T>(Query? q, DbSet<T> table) where T : class
+        public IEnumerable<T> FilterByQuery<T>(QueryRequest? q, DbSet<T> table) where T : class
         {
             bool search = String.IsNullOrEmpty(q.search) ? false : true;
             bool ord = String.IsNullOrEmpty(q.sortBy) ? false : true;
