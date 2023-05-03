@@ -10,6 +10,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Text.Json;
 using Serilog;
+using ContainersApiTask.Middleware;
 
 namespace ContainersApiTask
 {
@@ -18,32 +19,23 @@ namespace ContainersApiTask
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug().WriteTo.Console()
-                .WriteTo.File("logs.txt").CreateLogger();//, rollingInterval: RollingInterval.Day)
+                .WriteTo.File("logs.txt").CreateLogger();
             
-            //var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
-            //builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
-
             // Add services to the container.
 
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:LocalDB"]));
-            //builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:AzureDb"]));
-            builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
-            //builder.Services.AddControllers().AddJsonOptions(x =>
-            //              x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+            builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+            
             builder.Services.AddControllers().AddJsonOptions(x =>
                            x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
-         
-
-            
-
-
 
             builder.Services.AddControllers().AddXmlDataContractSerializerFormatters();
-            //builder.Services.AddSingleton<IDbInitService, DbInitService>();
+
             builder.Services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -66,7 +58,7 @@ namespace ContainersApiTask
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            //builder.Services.AddSwaggerGen();
+
             builder.Services.AddSwaggerGen(option =>
             {
                 option.SwaggerDoc("v1", new OpenApiInfo { Title = "Containers API", Version = "v1" });
@@ -80,25 +72,21 @@ namespace ContainersApiTask
                     Scheme = "Bearer"
                 });
                 option.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
                 {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
-                }
-            },
-            new string[]{}
-        }
-    });
+                    {
+                        new OpenApiSecurityScheme
+                            {
+                               Reference = new OpenApiReference
+                               {
+                                   Type=ReferenceType.SecurityScheme,
+                                   Id="Bearer"
+                               }
+                             },
+                        new string[]{}
+                    }
+                });
             });
 
-            //builder.Logging.AddDbLogger(options =>
-            //{
-            //    builder.Configuration.GetSection("Logging").GetSection("Database").GetSection("Options").Bind(options);
-            //});
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -110,15 +98,18 @@ namespace ContainersApiTask
 
             app.UseHttpsRedirection();
 
-            //added
             app.UseAuthentication();
-            //
+            
             app.UseAuthorization();
 
             app.MapControllers();
 
             app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+
+            // Adding base entities to database (for customization make changes in DbInitializer.cs)
+            // uncomment if database is empty
             //DbInitializer.Initialize(app);
+
             app.Run();
         }
     }

@@ -31,6 +31,7 @@ namespace ContainersApiTask.Controllers
             _roleManager = roleManager;
             _context = context;
         }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {
@@ -80,6 +81,7 @@ namespace ContainersApiTask.Controllers
             //This endpoint is created so any user can validate their token
             return Ok("Token is valid");
         }
+
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest registerRequest)
         {
@@ -95,23 +97,23 @@ namespace ContainersApiTask.Controllers
                 return Conflict($"Email {registerRequest.Email} is already registered.");
             }
 
-            Dictionary<string, object> dictt = new Dictionary<string, object>()
-            { {"id", Guid.NewGuid().ToString() },
-            { "email", registerRequest.Email},
-                {"role" , "customer" },
-                {"first_name", registerRequest.FirstName},
-                {"last_name",registerRequest.LastName },
-                {"password",registerRequest.Password
-    }
-            };
-            try
-            {
-                var newUserCheck = new UserV(dictt);
-            }
-            catch (ArgumentException e)
-            {
-                return BadRequest(e.Message);
-            }
+    //        Dictionary<string, object> dictt = new Dictionary<string, object>()
+    //        { {"id", Guid.NewGuid().ToString() },
+    //        { "email", registerRequest.Email},
+    //            {"role" , "customer" },
+    //            {"first_name", registerRequest.FirstName},
+    //            {"last_name",registerRequest.LastName },
+    //            {"password",registerRequest.Password
+    //}
+    //        };
+    //        try
+    //        {
+    //            var newUserCheck = new UserV(dictt);
+    //        }
+    //        catch (ArgumentException e)
+    //        {
+    //            return BadRequest(e.Message);
+    //        }
             var newUser = new User
             {
                 Email = registerRequest.Email,
@@ -120,7 +122,7 @@ namespace ContainersApiTask.Controllers
             };
 
             var result = await _userManager.CreateAsync(newUser, registerRequest.Password);
-            _userManager.AddToRoleAsync(newUser, "Customer");
+            await _userManager.AddToRoleAsync(newUser, "Customer");
             if (result.Succeeded)
             {
                 return Ok("User created successfully");
@@ -195,7 +197,7 @@ namespace ContainersApiTask.Controllers
 
 
         [HttpPost("revoke")]
-        //authorize!!!!!!!
+        [Authorize]
         public async Task<IActionResult> Revoke(RevokeRequest request)
         {
             if (!ModelState.IsValid)
@@ -237,10 +239,5 @@ namespace ContainersApiTask.Controllers
                 throw new SecurityTokenException("Invalid token");
             return principal;
         }
-
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
     }
 }

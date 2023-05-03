@@ -21,17 +21,17 @@ namespace ContainersApiTask.Models.Containers
         [DataMember(Order = 6)]
         public int AmountOfItems { get; set; }
 
-        public bool Search(string search)
-        {
-            foreach (var p in typeof(Container).GetProperties())
-            {
-                if (p.GetValue(this).ToString().ToLower().Contains(search.ToLower()))
-                {
-                    return true;
-                }
-            }
+        //public bool Search(string search)
+        //{
+        //    foreach (var p in typeof(PublishedContainer).GetProperties())
+        //    {
+        //        if (p.GetValue(this).ToString().ToLower().Contains(search.ToLower()))
+        //        {
+        //            return true;
+        //        }
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
     }
 }

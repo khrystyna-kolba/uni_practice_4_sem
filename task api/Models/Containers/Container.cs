@@ -25,6 +25,9 @@ using ContainersApiTask.Models.State;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using Azure;
+using ContainersApiTask.Models.CustomValidation;
+using ContainersApiTask.Models.Extensions;
+using ContainersApiTask.Models.Enumerations;
 
 namespace ContainersApiTask.Models.Containers
 {
@@ -70,6 +73,10 @@ namespace ContainersApiTask.Models.Containers
             {
                 try
                 {
+                    if (p.Value is null)
+                    {
+                        throw new NullReferenceException();
+                    }
                     if (GetType().GetProperty(p.Key.ToPascalCase()).PropertyType.IsEnum)
                     {
                         string v = p.Value.ToString().TransformEnum();
@@ -89,6 +96,7 @@ namespace ContainersApiTask.Models.Containers
                 {
                     errors.Add(p.Key, e.Message);
                 }
+                
             }
             if (errors.Count > 0)
             {

@@ -13,10 +13,6 @@ namespace ContainersApiTask.Models.State
         public void Publish(Container cont, string role);
         public void Unpublish(Container cont)
         {
-            //if (user != null)
-            //{
-            //    cont.SetState(new Draft());
-            //}
             cont.SetState(new Draft());
         }
     }
@@ -51,7 +47,7 @@ namespace ContainersApiTask.Models.State
     {
         public void Publish(Container cont, string role)
         {
-            return;
+            // Is already published
         }
     }
 }
